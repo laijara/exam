@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище absoluteExamModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Materials">
+    <Key>
+      <PropertyRef Name="MaterialsId" />
+    </Key>
+    <Property Name="MaterialsId" Type="int" Nullable="false" />
+    <Property Name="MaterialsName" Type="nvarchar" MaxLength="255" />
+    <Property Name="MaterialsTypeLink" Type="int" />
+    <Property Name="MaterialsMinPrice" Type="float" />
+    <Property Name="MaterialsQuantity" Type="float" />
+    <Property Name="MaterialsMinQuantity" Type="float" />
+    <Property Name="MaterialsInBox" Type="float" />
+    <Property Name="MaterialsUnit" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="MaterialsProducts">
+    <Key>
+      <PropertyRef Name="MaterialProductsId" />
+    </Key>
+    <Property Name="MaterialProductsId" Type="int" Nullable="false" />
+    <Property Name="MaterialsProductsMaterialsLink" Type="int" />
+    <Property Name="MaterialsProductsProductsLink" Type="int" />
+    <Property Name="MaterialsProductsQuantity" Type="int" />
+  </EntityType>
+  <EntityType Name="MaterialsType">
+    <Key>
+      <PropertyRef Name="MaterialsTypeId" />
+    </Key>
+    <Property Name="MaterialsTypeId" Type="int" Nullable="false" />
+    <Property Name="MaterialsTypeType" Type="nvarchar" MaxLength="255" />
+    <Property Name="MaterialsTypeProcent" Type="float" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ProductsId" />
+    </Key>
+    <Property Name="ProductsId" Type="int" Nullable="false" />
+    <Property Name="ProductsTypeLink" Type="int" />
+    <Property Name="ProductsName" Type="nvarchar" MaxLength="255" />
+    <Property Name="ProductsArticle" Type="nvarchar" MaxLength="255" />
+    <Property Name="ProductsMinPrice" Type="float" />
+  </EntityType>
+  <EntityType Name="ProductType">
+    <Key>
+      <PropertyRef Name="ProductsTypeId" />
+    </Key>
+    <Property Name="ProductsTypeId" Type="int" Nullable="false" />
+    <Property Name="ProductsTypeType" Type="nvarchar" MaxLength="255" />
+    <Property Name="ProductsTypeCoeff" Type="float" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_Materials_MaterialsType">
+    <End Role="MaterialsType" Type="Self.MaterialsType" Multiplicity="0..1" />
+    <End Role="Materials" Type="Self.Materials" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MaterialsType">
+        <PropertyRef Name="MaterialsTypeId" />
+      </Principal>
+      <Dependent Role="Materials">
+        <PropertyRef Name="MaterialsTypeLink" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaterialsProducts_Materials">
+    <End Role="Materials" Type="Self.Materials" Multiplicity="0..1" />
+    <End Role="MaterialsProducts" Type="Self.MaterialsProducts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Materials">
+        <PropertyRef Name="MaterialsId" />
+      </Principal>
+      <Dependent Role="MaterialsProducts">
+        <PropertyRef Name="MaterialsProductsMaterialsLink" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaterialsProducts_Products">
+    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+    <End Role="MaterialsProducts" Type="Self.MaterialsProducts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductsId" />
+      </Principal>
+      <Dependent Role="MaterialsProducts">
+        <PropertyRef Name="MaterialsProductsProductsLink" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Products_ProductType">
+    <End Role="ProductType" Type="Self.ProductType" Multiplicity="0..1" />
+    <End Role="Products" Type="Self.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductType">
+        <PropertyRef Name="ProductsTypeId" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="ProductsTypeLink" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище absoluteExamModelContainer">
+    <EntitySet Name="Materials" EntityType="Self.Materials" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MaterialsProducts" EntityType="Self.MaterialsProducts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MaterialsType" EntityType="Self.MaterialsType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductType" EntityType="Self.ProductType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Materials_MaterialsType" Association="Self.FK_Materials_MaterialsType">
+      <End Role="MaterialsType" EntitySet="MaterialsType" />
+      <End Role="Materials" EntitySet="Materials" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaterialsProducts_Materials" Association="Self.FK_MaterialsProducts_Materials">
+      <End Role="Materials" EntitySet="Materials" />
+      <End Role="MaterialsProducts" EntitySet="MaterialsProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaterialsProducts_Products" Association="Self.FK_MaterialsProducts_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="MaterialsProducts" EntitySet="MaterialsProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Products_ProductType" Association="Self.FK_Products_ProductType">
+      <End Role="ProductType" EntitySet="ProductType" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

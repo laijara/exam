@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="absoluteExamModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Materials">
+    <Key>
+      <PropertyRef Name="MaterialsId" />
+    </Key>
+    <Property Name="MaterialsId" Type="Int32" Nullable="false" />
+    <Property Name="MaterialsName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="MaterialsTypeLink" Type="Int32" />
+    <Property Name="MaterialsMinPrice" Type="Double" />
+    <Property Name="MaterialsQuantity" Type="Double" />
+    <Property Name="MaterialsMinQuantity" Type="Double" />
+    <Property Name="MaterialsInBox" Type="Double" />
+    <Property Name="MaterialsUnit" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="MaterialsType" Relationship="Self.FK_Materials_MaterialsType" FromRole="Materials" ToRole="MaterialsType" />
+    <NavigationProperty Name="MaterialsProducts" Relationship="Self.FK_MaterialsProducts_Materials" FromRole="Materials" ToRole="MaterialsProducts" />
+  </EntityType>
+  <EntityType Name="MaterialsProducts">
+    <Key>
+      <PropertyRef Name="MaterialProductsId" />
+    </Key>
+    <Property Name="MaterialProductsId" Type="Int32" Nullable="false" />
+    <Property Name="MaterialsProductsMaterialsLink" Type="Int32" />
+    <Property Name="MaterialsProductsProductsLink" Type="Int32" />
+    <Property Name="MaterialsProductsQuantity" Type="Int32" />
+    <NavigationProperty Name="Materials" Relationship="Self.FK_MaterialsProducts_Materials" FromRole="MaterialsProducts" ToRole="Materials" />
+    <NavigationProperty Name="Products" Relationship="Self.FK_MaterialsProducts_Products" FromRole="MaterialsProducts" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="MaterialsType">
+    <Key>
+      <PropertyRef Name="MaterialsTypeId" />
+    </Key>
+    <Property Name="MaterialsTypeId" Type="Int32" Nullable="false" />
+    <Property Name="MaterialsTypeType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="MaterialsTypeProcent" Type="Double" />
+    <NavigationProperty Name="Materials" Relationship="Self.FK_Materials_MaterialsType" FromRole="MaterialsType" ToRole="Materials" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ProductsId" />
+    </Key>
+    <Property Name="ProductsId" Type="Int32" Nullable="false" />
+    <Property Name="ProductsTypeLink" Type="Int32" />
+    <Property Name="ProductsName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ProductsArticle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ProductsMinPrice" Type="Double" />
+    <NavigationProperty Name="MaterialsProducts" Relationship="Self.FK_MaterialsProducts_Products" FromRole="Products" ToRole="MaterialsProducts" />
+    <NavigationProperty Name="ProductType" Relationship="Self.FK_Products_ProductType" FromRole="Products" ToRole="ProductType" />
+  </EntityType>
+  <EntityType Name="ProductType">
+    <Key>
+      <PropertyRef Name="ProductsTypeId" />
+    </Key>
+    <Property Name="ProductsTypeId" Type="Int32" Nullable="false" />
+    <Property Name="ProductsTypeType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ProductsTypeCoeff" Type="Double" />
+    <NavigationProperty Name="Products" Relationship="Self.FK_Products_ProductType" FromRole="ProductType" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Materials_MaterialsType">
+    <End Role="MaterialsType" Type="Self.MaterialsType" Multiplicity="0..1" />
+    <End Role="Materials" Type="Self.Materials" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MaterialsType">
+        <PropertyRef Name="MaterialsTypeId" />
+      </Principal>
+      <Dependent Role="Materials">
+        <PropertyRef Name="MaterialsTypeLink" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaterialsProducts_Materials">
+    <End Role="Materials" Type="Self.Materials" Multiplicity="0..1" />
+    <End Role="MaterialsProducts" Type="Self.MaterialsProducts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Materials">
+        <PropertyRef Name="MaterialsId" />
+      </Principal>
+      <Dependent Role="MaterialsProducts">
+        <PropertyRef Name="MaterialsProductsMaterialsLink" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaterialsProducts_Products">
+    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+    <End Role="MaterialsProducts" Type="Self.MaterialsProducts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductsId" />
+      </Principal>
+      <Dependent Role="MaterialsProducts">
+        <PropertyRef Name="MaterialsProductsProductsLink" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Products_ProductType">
+    <End Role="ProductType" Type="Self.ProductType" Multiplicity="0..1" />
+    <End Role="Products" Type="Self.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductType">
+        <PropertyRef Name="ProductsTypeId" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="ProductsTypeLink" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="absoluteExamEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Materials" EntityType="Self.Materials" />
+    <EntitySet Name="MaterialsProducts" EntityType="Self.MaterialsProducts" />
+    <EntitySet Name="MaterialsType" EntityType="Self.MaterialsType" />
+    <EntitySet Name="Products" EntityType="Self.Products" />
+    <EntitySet Name="ProductType" EntityType="Self.ProductType" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <AssociationSet Name="FK_Materials_MaterialsType" Association="Self.FK_Materials_MaterialsType">
+      <End Role="MaterialsType" EntitySet="MaterialsType" />
+      <End Role="Materials" EntitySet="Materials" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaterialsProducts_Materials" Association="Self.FK_MaterialsProducts_Materials">
+      <End Role="Materials" EntitySet="Materials" />
+      <End Role="MaterialsProducts" EntitySet="MaterialsProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaterialsProducts_Products" Association="Self.FK_MaterialsProducts_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="MaterialsProducts" EntitySet="MaterialsProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Products_ProductType" Association="Self.FK_Products_ProductType">
+      <End Role="ProductType" EntitySet="ProductType" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
